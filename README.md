@@ -1,0 +1,1 @@
+This repo uses Akamai function to build & deploy server updates, Script uses Fast purge API to automatically initiate call to purge the content in Akamai cache upon any changes in Origin server (e.g. images).This code is only works for the images which are being rotated or replaced with another image keeping the same file name.

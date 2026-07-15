@@ -1,0 +1,33 @@
+spin_manifest_version = 2
+
+[application]
+name = "akamai-ecommerce-site"
+version = "1.0.0"
+
+# =========================================================
+# COMPONENT 1: Your WebAssembly Application Server
+# =========================================================
+[component.akamai-ecommerce-site]
+source = "dist/akamai-ecommerce-site.wasm"
+allowed_outbound_hosts = ["https://commondatastorage.googleapis.com:443"]
+
+[component.akamai-ecommerce-site.build]
+command = "npm run build"
+
+[[trigger.http]]
+id = "trigger-app"
+component = "akamai-ecommerce-site"
+route = "/..."
+
+# =========================================================
+# COMPONENT 2: Spin's Native Static File Asset Driver
+# =========================================================
+[component.local-assets]
+# 🔥 FIXED: Matching the exact downloaded content digest from your environment
+source = { url = "https://github.com/spinframework/spin-fileserver/releases/download/v0.3.0/spin_static_fs.wasm", digest = "sha256:ef88708817e107bf49985c7cefe4dd1f199bf26f6727819183d5c996baa3d148" }
+files = [ { source = "public/", destination = "/" } ]
+
+[[trigger.http]]
+id = "trigger-assets"
+component = "local-assets"
+route = "/public/..."
